@@ -8,7 +8,7 @@
   "main": "server.js",
   "scripts": {
     "server": "node --watch server.js",
-    "start": "node server.js",
+    "start": "node scripts/seedAdmin.js && node server.js",
     "migrate:admin": "node scripts/seedAdmin.js",
     "seed": "node scripts/seedAdmin.js"
   },
