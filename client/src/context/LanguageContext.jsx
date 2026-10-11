@@ -91,6 +91,12 @@ const translations = {
     btnRecordPayment: 'កត់ត្រាការបង់ប្រាក់',
     btnPayFull: 'បង់គ្រប់',
     btnSettleFull: 'បង់ផ្តាច់សមតុល្យដែលនៅខ្វះ',
+    btnConfirmPayFull: 'យល់ព្រមបង់គ្រប់',
+    confirmPayFullTitle: 'ផ្ទៀងផ្ទាត់ការបង់ប្រាក់គ្រប់',
+    confirmPayFullDesc: 'តើអ្នកប្រាកដជាចង់បញ្ជាក់ការទូទាត់គ្រប់ចំនួនសម្រាប់',
+    confirmPayFullAmount: 'ចំនួនទឹកប្រាក់ត្រូវទូទាត់បង្គ្រប់៖',
+    confirmPayFullNote: 'កំណត់ត្រានេះនឹងត្រូវផ្លាស់ប្តូរទៅជា «បានបង់គ្រប់» ១០០%។',
+    payFullSuccess: 'បានទូទាត់ប្រាក់គ្រប់ចំនួនដោយជោគជ័យ!',
     btnConfirmDelete: 'យល់ព្រមលុប',
 
     // Search & Filters
@@ -316,6 +322,12 @@ const translations = {
     btnRecordPayment: 'Record Payment',
     btnPayFull: 'Pay Full',
     btnSettleFull: 'Pay Remaining Balance in Full',
+    btnConfirmPayFull: 'Confirm Full Payment',
+    confirmPayFullTitle: 'Verify Full Payment',
+    confirmPayFullDesc: 'Are you sure you want to confirm full payment for',
+    confirmPayFullAmount: 'Amount to settle in full:',
+    confirmPayFullNote: 'This record will be updated to 100% Fully Paid.',
+    payFullSuccess: 'Full payment recorded successfully!',
     btnConfirmDelete: 'Delete',
 
     // Search & Filters

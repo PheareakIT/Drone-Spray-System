@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import {
   CreditCard,
@@ -15,6 +15,8 @@ import {
   PieChart,
   PlusCircle,
   X,
+  ShieldCheck,
+  RefreshCw,
 } from 'lucide-react';
 import { sprayApi } from '../api/client';
 
@@ -28,6 +30,19 @@ export default function PaymentsPage({ sprays = [], customers = [], onRefresh })
   // Quick Payment modal
   const [payModalItem, setPayModalItem] = useState(null);
   const [paymentInput, setPaymentInput] = useState('');
+
+  // Verify Full Payment modal
+  const [verifyFullPayItem, setVerifyFullPayItem] = useState(null);
+
+  // Success notification banner/toast
+  const [successNotice, setSuccessNotice] = useState(null);
+
+  useEffect(() => {
+    if (successNotice) {
+      const timer = setTimeout(() => setSuccessNotice(null), 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [successNotice]);
 
   // Financial aggregates
   const totalBilled = sprays.reduce(
@@ -58,8 +73,10 @@ export default function PaymentsPage({ sprays = [], customers = [], onRefresh })
   });
 
   const handleSettleFull = async (item) => {
+    if (!item) return;
     setUpdatingId(item._id);
     const total = item.quantity * item.unitPrice;
+    const remaining = Math.max(0, total - (item.paidAmount || 0));
     try {
       await sprayApi.update(item._id, {
         date: item.date,
@@ -71,6 +88,11 @@ export default function PaymentsPage({ sprays = [], customers = [], onRefresh })
         paymentStatus: 'paid',
       });
       if (payModalItem?._id === item._id) setPayModalItem(null);
+      setVerifyFullPayItem(null);
+      setSuccessNotice({
+        customer: item.customer?.name || '',
+        amount: formatRiel(remaining),
+      });
       onRefresh();
     } catch (err) {
       alert(err.message || 'Failed to update payment');
@@ -348,7 +370,7 @@ export default function PaymentsPage({ sprays = [], customers = [], onRefresh })
                                 <span>{t('btnRecordPayment')}</span>
                               </button>
                               <button
-                                onClick={() => handleSettleFull(item)}
+                                onClick={() => setVerifyFullPayItem(item)}
                                 className="px-2 py-1.5 rounded-lg text-xs font-medium bg-slate-700 hover:bg-slate-600 text-slate-200 transition-colors"
                               >
                                 {t('btnPayFull')}
@@ -440,7 +462,7 @@ export default function PaymentsPage({ sprays = [], customers = [], onRefresh })
 
                       <button
                         type="button"
-                        onClick={() => handleSettleFull(payModalItem)}
+                        onClick={() => setVerifyFullPayItem(payModalItem)}
                         className="w-full py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 font-semibold text-xs rounded-xl transition-colors"
                       >
                         {t('btnSettleFull')} ({formatRiel(remaining)})
@@ -451,6 +473,131 @@ export default function PaymentsPage({ sprays = [], customers = [], onRefresh })
               );
             })()}
           </div>
+        </div>
+      )}
+
+      {/* Verify Full Payment Modal */}
+      {verifyFullPayItem && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-slate-800 border border-slate-700/80 rounded-3xl w-full max-w-md p-6 shadow-2xl relative animate-in zoom-in-95 duration-200">
+            {/* Close button */}
+            <button
+              onClick={() => !updatingId && setVerifyFullPayItem(null)}
+              disabled={!!updatingId}
+              className="absolute top-5 right-5 p-1 rounded-xl text-slate-400 hover:text-white hover:bg-slate-700/50 transition-colors disabled:opacity-50"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {/* Header Icon */}
+            <div className="w-14 h-14 rounded-2xl bg-linear-to-tr from-emerald-500/20 to-teal-500/20 text-emerald-400 flex items-center justify-center mx-auto mb-4 border border-emerald-500/30 shadow-lg shadow-emerald-500/10">
+              <ShieldCheck className="w-7 h-7" />
+            </div>
+
+            {/* Title & Subtitle */}
+            <h3 className="text-xl font-bold text-white text-center mb-1">
+              {t('confirmPayFullTitle')}
+            </h3>
+            <p className="text-xs text-slate-400 text-center mb-5">
+              {t('confirmPayFullDesc')}{' '}
+              <span className="font-bold text-white">
+                "{verifyFullPayItem.customer?.name || 'Customer'}"
+              </span>?
+            </p>
+
+            {/* Summary Breakdown Card */}
+            {(() => {
+              const total = verifyFullPayItem.quantity * verifyFullPayItem.unitPrice;
+              const paid = verifyFullPayItem.paidAmount || 0;
+              const remaining = Math.max(0, total - paid);
+
+              return (
+                <div className="space-y-4">
+                  <div className="bg-slate-900/90 rounded-2xl p-4 border border-slate-700/70 space-y-2.5 text-xs">
+                    <div className="flex justify-between items-center text-slate-300">
+                      <span>{t('thCustomer')}:</span>
+                      <span className="font-semibold text-white">{verifyFullPayItem.customer?.name}</span>
+                    </div>
+                    <div className="flex justify-between items-center text-slate-300">
+                      <span>{t('fieldSprayName')}:</span>
+                      <span className="text-emerald-400 font-medium">{verifyFullPayItem.spray}</span>
+                    </div>
+                    <div className="flex justify-between items-center text-slate-300">
+                      <span>{t('totalInvoice')}:</span>
+                      <span className="font-mono text-slate-200">{formatRiel(total)}</span>
+                    </div>
+                    <div className="flex justify-between items-center text-slate-300">
+                      <span>{t('alreadyCollected')}:</span>
+                      <span className="font-mono text-slate-400">{formatRiel(paid)}</span>
+                    </div>
+
+                    <div className="border-t border-slate-800 pt-2.5 flex justify-between items-center">
+                      <span className="font-semibold text-amber-300">{t('confirmPayFullAmount')}</span>
+                      <span className="text-base font-bold text-emerald-400 font-mono">
+                        {formatRiel(remaining)}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 p-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-300 text-xs">
+                    <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" />
+                    <span>{t('confirmPayFullNote')}</span>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex items-center gap-3 pt-2">
+                    <button
+                      type="button"
+                      disabled={!!updatingId}
+                      onClick={() => setVerifyFullPayItem(null)}
+                      className="flex-1 py-2.5 rounded-xl text-sm font-semibold text-slate-300 bg-slate-700/70 hover:bg-slate-700 transition-colors disabled:opacity-50"
+                    >
+                      {t('btnCancel')}
+                    </button>
+                    <button
+                      type="button"
+                      disabled={!!updatingId}
+                      onClick={() => handleSettleFull(verifyFullPayItem)}
+                      className="flex-1 py-2.5 rounded-xl text-sm font-semibold text-white bg-linear-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/25 disabled:opacity-50"
+                    >
+                      {updatingId === verifyFullPayItem._id ? (
+                        <>
+                          <RefreshCw className="w-4 h-4 animate-spin" />
+                          <span>{t('btnSaving')}</span>
+                        </>
+                      ) : (
+                        <>
+                          <CheckCircle2 className="w-4 h-4" />
+                          <span>{t('btnConfirmPayFull')}</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              );
+            })()}
+          </div>
+        </div>
+      )}
+
+      {/* Success Notification Toast */}
+      {successNotice && (
+        <div className="fixed top-5 right-5 z-50 max-w-sm w-full bg-slate-900/95 border border-emerald-500/40 rounded-2xl p-4 shadow-2xl shadow-emerald-500/10 flex items-start gap-3 backdrop-blur-md animate-in slide-in-from-top-3 fade-in duration-300">
+          <div className="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/30">
+            <CheckCircle2 className="w-5 h-5" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <h4 className="text-sm font-bold text-white">{t('payFullSuccess')}</h4>
+            <p className="text-xs text-slate-300 mt-0.5">
+              <span className="font-semibold text-white">{successNotice.customer}</span> • {successNotice.amount}
+            </p>
+          </div>
+          <button
+            onClick={() => setSuccessNotice(null)}
+            className="p-1 rounded-lg text-slate-400 hover:text-white transition-colors"
+          >
+            <X className="w-4 h-4" />
+          </button>
         </div>
       )}
     </div>

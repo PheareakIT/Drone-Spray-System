@@ -46,6 +46,10 @@ export default function DashboardLayout({ onRefresh, loadingData, counts = {} })
         { to: '/contact', label: t('navContact'), icon: PhoneCall },
       ];
 
+  const bottomNavLinks = isAdminOrSuper
+    ? navLinks.slice(0, 4)
+    : navLinks;
+
   const getRoleLabel = (r) => {
     if (r === 'super') return t('superRole');
     if (r === 'admin') return t('adminRole');
@@ -284,8 +288,8 @@ export default function DashboardLayout({ onRefresh, loadingData, counts = {} })
       </main>
 
       {/* Mobile Bottom Navigation Bar */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 flex justify-around py-2.5 px-2 z-40">
-        {navLinks.map((item) => {
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 flex justify-around py-2 px-2 z-40">
+        {bottomNavLinks.map((item) => {
           const Icon = item.icon;
           return (
             <NavLink
@@ -293,13 +297,13 @@ export default function DashboardLayout({ onRefresh, loadingData, counts = {} })
               to={item.to}
               end={item.to === '/'}
               className={({ isActive }) =>
-                `flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-all ${
-                  isActive ? 'text-emerald-400 font-bold scale-105' : 'text-slate-400'
+                `flex flex-col items-center justify-center gap-1 py-1 px-2 rounded-xl transition-all ${
+                  isActive ? 'text-emerald-400 font-bold scale-105' : 'text-slate-400 hover:text-slate-200'
                 }`
               }
             >
-              <Icon className="w-5 h-5" />
-              <span className="text-[10px]">{item.label}</span>
+              <Icon className="w-5 h-5 shrink-0" />
+              <span className="text-[11px] text-center leading-tight">{item.label}</span>
             </NavLink>
           );
         })}
