@@ -536,26 +536,43 @@ export default function SpraysPage({ sprays = [], customers = [], onRefresh }) {
 
       {/* Modal for Add / Edit */}
       {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="bg-slate-800 border border-slate-700 rounded-3xl w-full max-w-lg p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto">
-            <h3 className="text-xl font-bold text-white mb-1">
-              {editingSpray ? t('modalEditSprayTitle') : t('modalNewSprayTitle')}
-            </h3>
-            <p className="text-xs text-slate-400 mb-5">
-              {t('modalSprayDesc')}
-            </p>
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/70 backdrop-blur-sm transition-all">
+          <div className="bg-slate-800 border-t sm:border border-slate-700/80 rounded-t-3xl sm:rounded-3xl w-full max-w-lg p-5 sm:p-6 shadow-2xl animate-in slide-in-from-bottom-6 sm:zoom-in-95 duration-150 max-h-[94vh] overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {/* Mobile Drag Indicator */}
+            <div className="w-12 h-1.5 bg-slate-600/70 rounded-full mx-auto -mt-1.5 mb-3 sm:hidden" />
+
+            {/* Header */}
+            <div className="flex items-start justify-between mb-3.5">
+              <div>
+                <h3 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+                  <Droplets className="w-5 h-5 text-emerald-400 shrink-0" />
+                  <span>{editingSpray ? t('modalEditSprayTitle') : t('modalNewSprayTitle')}</span>
+                </h3>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  {t('modalSprayDesc')}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setModalOpen(false)}
+                className="p-1.5 rounded-xl bg-slate-700/60 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors shrink-0 ml-2"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
 
             {error && (
-              <div className="mb-4 p-3 rounded-xl bg-rose-500/20 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 flex-shrink-0" />
+              <div className="mb-3 p-2.5 rounded-xl bg-rose-500/20 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 shrink-0" />
                 <span>{error}</span>
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <form onSubmit={handleSubmit} className="space-y-3">
+              {/* Row 1: Date & Customer in 2 columns */}
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1 uppercase tracking-wider">
+                  <label className="block text-[11px] font-semibold text-slate-300 mb-1 uppercase tracking-wider">
                     {t('fieldDate')}
                   </label>
                   <input
@@ -563,19 +580,19 @@ export default function SpraysPage({ sprays = [], customers = [], onRefresh }) {
                     required
                     value={formData.date}
                     onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="w-full px-3 py-2 bg-slate-900 border border-slate-700/80 rounded-xl text-white text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1 uppercase tracking-wider">
+                  <label className="block text-[11px] font-semibold text-slate-300 mb-1 uppercase tracking-wider">
                     {t('fieldCustomer')}
                   </label>
                   <select
                     required
                     value={formData.customer}
                     onChange={(e) => setFormData({ ...formData, customer: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="w-full px-3 py-2 bg-slate-900 border border-slate-700/80 rounded-xl text-white text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   >
                     <option value="" disabled>{t('selectCustomerPlaceholder')}</option>
                     {customers.map((c) => (
@@ -587,8 +604,9 @@ export default function SpraysPage({ sprays = [], customers = [], onRefresh }) {
                 </div>
               </div>
 
+              {/* Row 2: Spray Chemical Name */}
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1 uppercase tracking-wider">
+                <label className="block text-[11px] font-semibold text-slate-300 mb-1 uppercase tracking-wider">
                   {t('fieldSprayName')}
                 </label>
                 <input
@@ -597,47 +615,66 @@ export default function SpraysPage({ sprays = [], customers = [], onRefresh }) {
                   value={formData.spray}
                   onChange={(e) => setFormData({ ...formData, spray: e.target.value })}
                   placeholder="e.g. Copper Fungicide 50WP"
-                  className="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="w-full px-3.5 py-2 bg-slate-900 border border-slate-700/80 rounded-xl text-white text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {/* Row 3: Quantity & Price on ONE ROW */}
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1 uppercase tracking-wider">
+                  <label className="block text-[11px] font-semibold text-slate-300 mb-1 uppercase tracking-wider">
                     {t('fieldQuantity')}
                   </label>
-                  <input
-                    type="number"
-                    min="0"
-                    step="any"
-                    required
-                    value={formData.quantity}
-                    onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
-                    placeholder="10"
-                    className="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                  />
+                  <div className="relative">
+                    <input
+                      type="number"
+                      min="0"
+                      step="any"
+                      required
+                      value={formData.quantity}
+                      onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
+                      placeholder="10"
+                      className="w-full px-3 py-2 bg-slate-900 border border-slate-700/80 rounded-xl text-white text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 font-mono pr-8"
+                    />
+                    <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[11px] text-slate-500 pointer-events-none">
+                      ha
+                    </span>
+                  </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1 uppercase tracking-wider">
+                  <label className="block text-[11px] font-semibold text-slate-300 mb-1 uppercase tracking-wider">
                     {t('fieldUnitPrice')}
                   </label>
-                  <input
-                    type="number"
-                    min="0"
-                    step="any"
-                    required
-                    value={formData.unitPrice}
-                    onChange={(e) => setFormData({ ...formData, unitPrice: e.target.value })}
-                    placeholder="25000"
-                    className="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                  />
+                  <div className="relative">
+                    <input
+                      type="number"
+                      min="0"
+                      step="any"
+                      required
+                      value={formData.unitPrice}
+                      onChange={(e) => setFormData({ ...formData, unitPrice: e.target.value })}
+                      placeholder="25000"
+                      className="w-full px-3 py-2 bg-slate-900 border border-slate-700/80 rounded-xl text-white text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 font-mono pr-7"
+                    />
+                    <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[11px] text-slate-500 pointer-events-none">
+                      ៛
+                    </span>
+                  </div>
                 </div>
+              </div>
 
-                <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1 uppercase tracking-wider">
+              {/* Row 4: Paid Amount with 1-Tap Quick Action Buttons */}
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="text-[11px] font-semibold text-slate-300 uppercase tracking-wider">
                     {t('fieldPaidAmount')}
                   </label>
+                  <span className="text-[11px] text-slate-400">
+                    {t('remainingDue')}: <span className="font-semibold text-rose-400">{formatRiel(formRemaining)}</span>
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   <input
                     type="number"
                     min="0"
@@ -645,52 +682,91 @@ export default function SpraysPage({ sprays = [], customers = [], onRefresh }) {
                     step="any"
                     value={formData.paidAmount}
                     onChange={(e) => setFormData({ ...formData, paidAmount: e.target.value })}
-                    placeholder="100"
-                    className="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    placeholder="0"
+                    className="w-full px-3 py-2 bg-slate-900 border border-slate-700/80 rounded-xl text-white text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 font-mono"
                   />
+                  {/* Quick Preset Buttons */}
+                  <div className="grid grid-cols-3 gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, paidAmount: 0 })}
+                      className={`py-1.5 px-1 rounded-xl text-[11px] font-medium border transition-all text-center ${
+                        Number(formData.paidAmount) === 0
+                          ? 'bg-rose-500/20 text-rose-300 border-rose-500/40 font-semibold'
+                          : 'bg-slate-900/60 text-slate-400 border-slate-700/60 hover:text-slate-200'
+                      }`}
+                    >
+                      {t('presetZero') || '0៛'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, paidAmount: Math.round(formTotal * 0.5) })}
+                      className={`py-1.5 px-1 rounded-xl text-[11px] font-medium border transition-all text-center ${
+                        Number(formData.paidAmount) === Math.round(formTotal * 0.5) && formTotal > 0
+                          ? 'bg-sky-500/20 text-sky-300 border-sky-500/40 font-semibold'
+                          : 'bg-slate-900/60 text-slate-400 border-slate-700/60 hover:text-slate-200'
+                      }`}
+                    >
+                      50%
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, paidAmount: formTotal })}
+                      className={`py-1.5 px-1 rounded-xl text-[11px] font-medium border transition-all text-center ${
+                        Number(formData.paidAmount) === formTotal && formTotal > 0
+                          ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 font-semibold'
+                          : 'bg-slate-900/60 text-slate-400 border-slate-700/60 hover:text-slate-200'
+                      }`}
+                    >
+                      100%
+                    </button>
+                  </div>
                 </div>
               </div>
 
-              {/* Dynamic Payment Calculation Summary */}
-              <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-700 space-y-2 text-sm">
-                <div className="flex justify-between text-slate-300">
-                  <span>{t('totalCalculated')}</span>
-                  <span className="font-bold text-white">{formatRiel(formTotal)}</span>
+              {/* Dynamic Payment Calculation Summary (Compact Box) */}
+              <div className="p-3 rounded-2xl bg-slate-900/90 border border-slate-700/70 text-xs space-y-1.5">
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="flex justify-between text-slate-300">
+                    <span>{t('totalCalculated')}</span>
+                    <span className="font-bold text-white">{formatRiel(formTotal)}</span>
+                  </div>
+                  <div className="flex justify-between text-slate-300">
+                    <span>{t('paidReceived')}</span>
+                    <span className="font-bold text-emerald-400">{formatRiel(formPaid)}</span>
+                  </div>
                 </div>
-                <div className="flex justify-between text-slate-300">
-                  <span>{t('paidReceived')}</span>
-                  <span className="font-bold text-emerald-400">{formatRiel(formPaid)}</span>
-                </div>
-                <div className="flex justify-between border-t border-slate-800 pt-1.5 font-bold">
+                <div className="flex justify-between border-t border-slate-800/80 pt-1.5 font-bold">
                   <span className="text-slate-400">{t('remainingDue')}</span>
                   <span className={formRemaining > 0 ? 'text-amber-400' : 'text-emerald-400'}>
                     {formatRiel(formRemaining)}
                   </span>
                 </div>
-                <div className="text-xs text-slate-400 pt-1">
-                  <span>{t('autoStatus')} </span>
-                  <span className="font-semibold text-white uppercase">
+                <div className="text-[11px] text-slate-400 pt-0.5 flex items-center justify-between">
+                  <span>{t('autoStatus')}</span>
+                  <span className="font-semibold text-white uppercase text-[11px]">
                     {formPaid >= formTotal && formTotal > 0
                       ? t('statusPaid')
                       : formPaid > 0
-                      ? `${t('statusPartial')} (${formatRiel(formRemaining)} ${t('leftDue')})`
-                      : t('statusPending')}
+                        ? `${t('statusPartial')} (${formatRiel(formRemaining)} ${t('leftDue')})`
+                        : t('statusPending')}
                   </span>
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-700">
+              {/* Action Buttons */}
+              <div className="flex items-center justify-end gap-2.5 pt-2 border-t border-slate-700/70">
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="px-4 py-2 rounded-xl text-sm font-semibold text-slate-400 hover:text-white transition-colors"
+                  className="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-400 hover:text-white transition-colors"
                 >
                   {t('btnCancel')}
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="px-5 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-semibold text-sm rounded-xl shadow-lg shadow-emerald-500/20 disabled:opacity-50"
+                  className="px-5 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-bold text-xs sm:text-sm rounded-xl shadow-lg shadow-emerald-500/20 disabled:opacity-50 transition-all flex items-center gap-1.5"
                 >
                   {loading ? t('btnSaving') : editingSpray ? t('btnSave') : t('btnNewSpray')}
                 </button>
@@ -702,8 +778,10 @@ export default function SpraysPage({ sprays = [], customers = [], onRefresh }) {
 
       {/* Quick Payment Modal */}
       {quickPayItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="bg-slate-800 border border-slate-700 rounded-3xl w-full max-w-md p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-150">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/70 backdrop-blur-sm transition-all">
+          <div className="bg-slate-800 border-t sm:border border-slate-700 rounded-t-3xl sm:rounded-3xl w-full max-w-md p-5 sm:p-6 shadow-2xl animate-in slide-in-from-bottom-6 sm:zoom-in-95 duration-150">
+            {/* Mobile Drag Indicator */}
+            <div className="w-12 h-1.5 bg-slate-600/70 rounded-full mx-auto -mt-1.5 mb-3 sm:hidden" />
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-xl font-bold text-white flex items-center gap-2">
                 <CreditCard className="w-5 h-5 text-emerald-400" />
@@ -787,8 +865,10 @@ export default function SpraysPage({ sprays = [], customers = [], onRefresh }) {
 
       {/* Delete Confirmation Modal */}
       {deleteTarget && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="bg-slate-800 border border-slate-700 rounded-3xl w-full max-w-sm p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-150">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/70 backdrop-blur-sm transition-all">
+          <div className="bg-slate-800 border-t sm:border border-slate-700 rounded-t-3xl sm:rounded-3xl w-full max-w-sm p-6 shadow-2xl animate-in slide-in-from-bottom-6 sm:zoom-in-95 duration-150">
+            {/* Mobile Drag Indicator */}
+            <div className="w-12 h-1.5 bg-slate-600/70 rounded-full mx-auto -mt-1.5 mb-3 sm:hidden" />
             <div className="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-400 flex items-center justify-center mx-auto mb-4 border border-rose-500/20">
               <Trash2 className="w-6 h-6" />
             </div>

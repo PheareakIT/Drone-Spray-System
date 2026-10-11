@@ -127,6 +127,7 @@ const translations = {
     paidReceived: 'ប្រាក់បានទទួល៖',
     remainingDue: 'សមតុល្យនៅខ្វះ៖',
     autoStatus: 'ស្ថានភាពគណនាស្វ័យប្រវត្ត៖',
+    presetZero: '0 ៛',
 
     // Quick Pay Modal
     quickPayTitle: 'កត់ត្រាការបង់ប្រាក់របស់អតិថិជន',
@@ -358,6 +359,7 @@ const translations = {
     paidReceived: 'Paid Received:',
     remainingDue: 'Remaining Balance Due:',
     autoStatus: 'Auto-calculated Status:',
+    presetZero: '0 ៛',
 
     // Quick Pay Modal
     quickPayTitle: 'Record Payment',
