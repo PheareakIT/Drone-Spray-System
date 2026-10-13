@@ -544,10 +544,8 @@ export default function SpraysPage({ sprays = [], customers = [], onRefresh }) {
 
       {/* Modal for Add / Edit */}
       {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/70 backdrop-blur-sm transition-all">
-          <div className="bg-slate-800 border-t sm:border border-slate-700/80 rounded-t-3xl sm:rounded-3xl w-full max-w-lg p-5 sm:p-6 shadow-2xl animate-in slide-in-from-bottom-6 sm:zoom-in-95 duration-150 max-h-[94vh] overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {/* Mobile Drag Indicator */}
-            <div className="w-12 h-1.5 bg-slate-600/70 rounded-full mx-auto -mt-1.5 mb-3 sm:hidden" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm transition-all">
+          <div className="bg-slate-800 border border-slate-700/80 rounded-3xl w-full max-w-lg p-5 sm:p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
 
             {/* Header */}
             <div className="flex items-start justify-between mb-3.5">
@@ -786,10 +784,8 @@ export default function SpraysPage({ sprays = [], customers = [], onRefresh }) {
 
       {/* Quick Payment Modal */}
       {quickPayItem && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/70 backdrop-blur-sm transition-all">
-          <div className="bg-slate-800 border-t sm:border border-slate-700 rounded-t-3xl sm:rounded-3xl w-full max-w-md p-5 sm:p-6 shadow-2xl animate-in slide-in-from-bottom-6 sm:zoom-in-95 duration-150">
-            {/* Mobile Drag Indicator */}
-            <div className="w-12 h-1.5 bg-slate-600/70 rounded-full mx-auto -mt-1.5 mb-3 sm:hidden" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm transition-all">
+          <div className="bg-slate-800 border border-slate-700 rounded-3xl w-full max-w-md p-5 sm:p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-xl font-bold text-white flex items-center gap-2">
                 <CreditCard className="w-5 h-5 text-emerald-400" />
@@ -873,10 +869,8 @@ export default function SpraysPage({ sprays = [], customers = [], onRefresh }) {
 
       {/* Delete Confirmation Modal */}
       {deleteTarget && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/70 backdrop-blur-sm transition-all">
-          <div className="bg-slate-800 border-t sm:border border-slate-700 rounded-t-3xl sm:rounded-3xl w-full max-w-sm p-6 shadow-2xl animate-in slide-in-from-bottom-6 sm:zoom-in-95 duration-150">
-            {/* Mobile Drag Indicator */}
-            <div className="w-12 h-1.5 bg-slate-600/70 rounded-full mx-auto -mt-1.5 mb-3 sm:hidden" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm transition-all">
+          <div className="bg-slate-800 border border-slate-700 rounded-3xl w-full max-w-sm p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-150">
             <div className="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-400 flex items-center justify-center mx-auto mb-4 border border-rose-500/20">
               <Trash2 className="w-6 h-6" />
             </div>
