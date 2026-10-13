@@ -13,7 +13,7 @@ const seedAdmin = async () => {
     console.log('Connected to database.');
 
     const adminUsername = process.env.ADMIN_USERNAME || 'admin';
-    const adminEmail = process.env.ADMIN_EMAIL || 'admin@spraysystem.com';
+    const adminEmail = process.env.ADMIN_EMAIL || 'admin@gmail.com';
     const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
     const adminRole = 'super';
 
