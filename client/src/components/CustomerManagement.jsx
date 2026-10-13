@@ -68,7 +68,12 @@ export default function CustomerManagement({ customers, onRefresh }) {
       setDeleteTarget(null);
       onRefresh();
     } catch (err) {
-      toast.error(err.message || 'Failed to delete customer');
+      if (err.message && err.message.toLowerCase().includes('associated spray record')) {
+        toast.error(t('cannotDeleteCustomerHasSprays'));
+      } else {
+        toast.error(err.message || 'Failed to delete customer');
+      }
+      setDeleteTarget(null);
     } finally {
       setIsDeleting(false);
     }

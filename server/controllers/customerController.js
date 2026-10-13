@@ -1,4 +1,5 @@
 const Customer = require('../models/Customer');
+const SprayList = require('../models/SprayList');
 
 // Create a new customer
 exports.createCustomer = async (req, res) => {
@@ -53,13 +54,27 @@ exports.updateCustomer = async (req, res) => {
   }
 };
 
-// Delete customer by ID
+// Delete customer by ID (with referential integrity check against SprayList)
 exports.deleteCustomer = async (req, res) => {
   try {
-    const customer = await Customer.findByIdAndDelete(req.params.id);
+    const customerId = req.params.id;
+
+    const customer = await Customer.findById(customerId);
     if (!customer) {
       return res.status(404).json({ message: 'Customer not found' });
     }
+
+    // Check if customer is referenced in any spray records
+    const sprayCount = await SprayList.countDocuments({ customer: customerId });
+    if (sprayCount > 0) {
+      return res.status(400).json({
+        message: `Cannot delete customer "${customer.name}" because they have ${sprayCount} associated spray record(s). Please delete or reassign their spray records first.`,
+        code: 'CUSTOMER_HAS_SPRAYS',
+        sprayCount,
+      });
+    }
+
+    await Customer.findByIdAndDelete(customerId);
     res.status(200).json({ message: 'Customer deleted successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message });

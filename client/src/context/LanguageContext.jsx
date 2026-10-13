@@ -149,6 +149,7 @@ const translations = {
     cannotUndo: 'សកម្មភាពនេះមិនអាចត្រឡប់វិញបានទេ។',
     cannotDeleteSelf: 'អ្នកមិនអាចលុបគណនីផ្ទាល់ខ្លួនរបស់អ្នកបានទេ!',
     adminOnlyDeleteUsers: 'អ្នកគ្រប់គ្រង (Admin) អាចលុបបានតែគណនីអ្នកប្រើប្រាស់ទូទៅ (User) ប៉ុណ្ណោះ!',
+    cannotDeleteCustomerHasSprays: 'មិនអាចលុបអតិថិជននេះបានទេ ដោយសារមានកំណត់ត្រាបាញ់ថ្នាំដែលកំពុងប្រើប្រាស់។ សូមលុបកំណត់ត្រាបាញ់ថ្នាំជាមុនសិន!',
 
     // Payments Page
     paymentsTitle: 'មជ្ឈមណ្ឌលទូទាត់ & ជម្រះបញ្ជី',
@@ -396,6 +397,7 @@ const translations = {
     cannotUndo: 'This action cannot be undone.',
     cannotDeleteSelf: 'You cannot delete your own account!',
     adminOnlyDeleteUsers: 'Admins can only delete accounts with the user role!',
+    cannotDeleteCustomerHasSprays: 'Cannot delete this customer because they have active spray records. Please delete or reassign their spray records first.',
 
     // Payments Page
     paymentsTitle: 'Payment & Settlement Hub',
