@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import DroneLogo from './DroneLogo';
@@ -56,11 +57,15 @@ export default function Login() {
           password: formData.password,
           role: 'user',
         });
+        toast.success(t('toastSignupSuccess'));
       } else {
         await signin(formData.email.trim(), formData.password);
+        toast.success(t('toastLoginSuccess'));
       }
     } catch (err) {
-      setError(err.message || t('authFailed'));
+      const errMsg = err.message || t('authFailed');
+      setError(errMsg);
+      toast.error(errMsg);
     } finally {
       setLoading(false);
     }

@@ -19,6 +19,7 @@ import {
   X,
 } from 'lucide-react';
 import { sprayApi } from '../api/client';
+import toast from 'react-hot-toast';
 
 export default function SpraysPage({ sprays = [], customers = [], onRefresh }) {
   const location = useLocation();
@@ -127,13 +128,17 @@ export default function SpraysPage({ sprays = [], customers = [], onRefresh }) {
 
       if (editingSpray) {
         await sprayApi.update(editingSpray._id, payload);
+        toast.success(t('toastSprayUpdated'));
       } else {
         await sprayApi.create(payload);
+        toast.success(t('toastSprayAdded'));
       }
       setModalOpen(false);
       onRefresh();
     } catch (err) {
-      setError(err.message || 'Operation failed');
+      const errMsg = err.message || 'Operation failed';
+      setError(errMsg);
+      toast.error(errMsg);
     } finally {
       setLoading(false);
     }
@@ -150,7 +155,7 @@ export default function SpraysPage({ sprays = [], customers = [], onRefresh }) {
     const added = Number(quickPayAmount) || 0;
 
     if (added > remaining) {
-      alert(`${t('errPaymentExceedsDue')} (${formatRiel(remaining)})`);
+      toast.error(`${t('errPaymentExceedsDue')} (${formatRiel(remaining)})`);
       return;
     }
 
@@ -167,11 +172,12 @@ export default function SpraysPage({ sprays = [], customers = [], onRefresh }) {
         paidAmount: newPaid,
       });
 
+      toast.success(t('toastPaymentSuccess'));
       setQuickPayItem(null);
       setQuickPayAmount('');
       onRefresh();
     } catch (err) {
-      alert(err.message || 'Payment update failed');
+      toast.error(err.message || 'Payment update failed');
     } finally {
       setQuickPayLoading(false);
     }
@@ -189,10 +195,11 @@ export default function SpraysPage({ sprays = [], customers = [], onRefresh }) {
         paidAmount: total,
         paymentStatus: 'paid',
       });
+      toast.success(t('payFullSuccess') || t('toastPaymentSuccess'));
       if (quickPayItem?._id === item._id) setQuickPayItem(null);
       onRefresh();
     } catch (err) {
-      alert(err.message || 'Failed to settle balance');
+      toast.error(err.message || 'Failed to settle balance');
     }
   };
 
@@ -201,10 +208,11 @@ export default function SpraysPage({ sprays = [], customers = [], onRefresh }) {
     setIsDeleting(true);
     try {
       await sprayApi.delete(deleteTarget.id);
+      toast.success(t('toastSprayDeleted'));
       setDeleteTarget(null);
       onRefresh();
     } catch (err) {
-      alert(err.message || 'Failed to delete record');
+      toast.error(err.message || 'Failed to delete record');
     } finally {
       setIsDeleting(false);
     }

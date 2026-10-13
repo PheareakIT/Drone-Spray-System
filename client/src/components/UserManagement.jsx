@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Shield, Plus, Search, Edit2, Trash2, Mail, UserCheck, AlertCircle } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { userApi } from '../api/client';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
@@ -72,13 +73,17 @@ export default function UserManagement({ users, onRefresh }) {
 
       if (editingUser) {
         await userApi.update(editingUser._id, payload);
+        toast.success(t('toastUserUpdated'));
       } else {
         await userApi.create(payload);
+        toast.success(t('toastUserAdded'));
       }
       setModalOpen(false);
       onRefresh();
     } catch (err) {
-      setError(err.message || 'Operation failed');
+      const errMsg = err.message || 'Operation failed';
+      setError(errMsg);
+      toast.error(errMsg);
     } finally {
       setLoading(false);
     }
@@ -116,22 +121,23 @@ export default function UserManagement({ users, onRefresh }) {
     if (!deleteTarget) return;
     const currentUserId = String(currentUser?._id || currentUser?.id || '');
     if (String(deleteTarget.id) === currentUserId) {
-      alert(t('cannotDeleteSelf'));
+      toast.error(t('cannotDeleteSelf'));
       setDeleteTarget(null);
       return;
     }
     if (currentUser?.role === 'admin' && deleteTarget.role !== 'user') {
-      alert(t('adminOnlyDeleteUsers'));
+      toast.error(t('adminOnlyDeleteUsers'));
       setDeleteTarget(null);
       return;
     }
     setIsDeleting(true);
     try {
       await userApi.delete(deleteTarget.id);
+      toast.success(t('toastUserDeleted'));
       setDeleteTarget(null);
       onRefresh();
     } catch (err) {
-      alert(err.message || 'Failed to delete user');
+      toast.error(err.message || 'Failed to delete user');
     } finally {
       setIsDeleting(false);
     }

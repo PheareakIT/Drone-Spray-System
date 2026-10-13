@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 import { useLanguage } from '../context/LanguageContext';
 import { Users, Plus, Search, Edit2, Trash2, Phone, User, AlertCircle, CheckCircle } from 'lucide-react';
 import { customerApi } from '../api/client';
@@ -42,13 +43,17 @@ export default function CustomerManagement({ customers, onRefresh }) {
     try {
       if (editingCustomer) {
         await customerApi.update(editingCustomer._id, formData);
+        toast.success(t('toastCustomerUpdated'));
       } else {
         await customerApi.create(formData);
+        toast.success(t('toastCustomerAdded'));
       }
       setModalOpen(false);
       onRefresh();
     } catch (err) {
-      setError(err.message || 'Operation failed');
+      const errMsg = err.message || 'Operation failed';
+      setError(errMsg);
+      toast.error(errMsg);
     } finally {
       setLoading(false);
     }
@@ -59,10 +64,11 @@ export default function CustomerManagement({ customers, onRefresh }) {
     setIsDeleting(true);
     try {
       await customerApi.delete(deleteTarget.id);
+      toast.success(t('toastCustomerDeleted'));
       setDeleteTarget(null);
       onRefresh();
     } catch (err) {
-      alert(err.message || 'Failed to delete customer');
+      toast.error(err.message || 'Failed to delete customer');
     } finally {
       setIsDeleting(false);
     }

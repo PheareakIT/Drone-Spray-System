@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import DroneLogo from '../components/DroneLogo';
@@ -28,6 +29,7 @@ export default function DashboardLayout({ onRefresh, loadingData, counts = {} })
 
   const handleSignout = async () => {
     await signout();
+    toast.success(t('toastLogoutSuccess'));
     navigate('/login');
   };
 

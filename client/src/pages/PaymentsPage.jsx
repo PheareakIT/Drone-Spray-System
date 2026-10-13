@@ -19,6 +19,7 @@ import {
   RefreshCw,
 } from 'lucide-react';
 import { sprayApi } from '../api/client';
+import toast from 'react-hot-toast';
 
 export default function PaymentsPage({ sprays = [], customers = [], onRefresh }) {
   const { t, formatRiel } = useLanguage();
@@ -93,9 +94,10 @@ export default function PaymentsPage({ sprays = [], customers = [], onRefresh })
         customer: item.customer?.name || '',
         amount: formatRiel(remaining),
       });
+      toast.success(t('payFullSuccess') || t('toastPaymentSuccess'));
       onRefresh();
     } catch (err) {
-      alert(err.message || 'Failed to update payment');
+      toast.error(err.message || 'Failed to update payment');
     } finally {
       setUpdatingId(null);
     }
@@ -111,7 +113,7 @@ export default function PaymentsPage({ sprays = [], customers = [], onRefresh })
     const added = Number(paymentInput) || 0;
 
     if (added > remaining) {
-      alert(`${t('errPaymentExceedsDue')} (${formatRiel(remaining)})`);
+      toast.error(`${t('errPaymentExceedsDue')} (${formatRiel(remaining)})`);
       return;
     }
 
@@ -128,11 +130,12 @@ export default function PaymentsPage({ sprays = [], customers = [], onRefresh })
         paidAmount: newPaid,
       });
 
+      toast.success(t('toastPaymentSuccess'));
       setPayModalItem(null);
       setPaymentInput('');
       onRefresh();
     } catch (err) {
-      alert(err.message || 'Failed to record payment');
+      toast.error(err.message || 'Failed to record payment');
     } finally {
       setUpdatingId(null);
     }

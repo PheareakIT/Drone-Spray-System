@@ -232,6 +232,21 @@ const translations = {
     messagePlaceholder: 'សូមសរសេរព័ត៌មានលម្អិតអំពីសំណើ ឬចម្ងល់របស់អ្នកនៅទីនេះ...',
     btnSendMessage: 'ផ្ញើសារឥឡូវនេះ',
     messageSentSuccess: 'សាររបស់អ្នកត្រូវបានផ្ញើដោយជោគជ័យ! ក្រុមការងារយើងនឹងទាក់ទងទៅវិញឆាប់ៗ។',
+
+    // Toast Notifications
+    toastLoginSuccess: 'ចូលប្រព័ន្ធបានជោគជ័យ! សូមស្វាគមន៍',
+    toastLogoutSuccess: 'បានចាកចេញពីប្រព័ន្ធដោយជោគជ័យ',
+    toastSignupSuccess: 'បានចុះឈ្មោះ និងចូលប្រព័ន្ធដោយជោគជ័យ',
+    toastCustomerAdded: 'បានបន្ថែមអតិថិជនថ្មីដោយជោគជ័យ',
+    toastCustomerUpdated: 'បានកែប្រែព័ត៌មានអតិថិជនដោយជោគជ័យ',
+    toastCustomerDeleted: 'បានលុបអតិថិជនដោយជោគជ័យ',
+    toastSprayAdded: 'បានបន្ថែមកំណត់ត្រាបាញ់ថ្នាំដោយជោគជ័យ',
+    toastSprayUpdated: 'បានកែប្រែកំណត់ត្រាបាញ់ថ្នាំដោយជោគជ័យ',
+    toastSprayDeleted: 'បានលុបកំណត់ត្រាបាញ់ថ្នាំដោយជោគជ័យ',
+    toastPaymentSuccess: 'បានកត់ត្រាការទូទាត់ប្រាក់ដោយជោគជ័យ',
+    toastUserAdded: 'បានបង្កើតអ្នកប្រើប្រាស់ថ្មីដោយជោគជ័យ',
+    toastUserUpdated: 'បានកែប្រែព័ត៌មានអ្នកប្រើប្រាស់ដោយជោគជ័យ',
+    toastUserDeleted: 'បានលុបអ្នកប្រើប្រាស់ដោយជោគជ័យ',
   },
   en: {
     // Branding
@@ -464,6 +479,21 @@ const translations = {
     messagePlaceholder: 'Please describe your request, farmland size, or question here...',
     btnSendMessage: 'Send Message Now',
     messageSentSuccess: 'Your message has been sent successfully! Our team will reach out to you shortly.',
+
+    // Toast Notifications
+    toastLoginSuccess: 'Signed in successfully! Welcome back.',
+    toastLogoutSuccess: 'Signed out successfully.',
+    toastSignupSuccess: 'Account created and signed in successfully.',
+    toastCustomerAdded: 'Customer added successfully.',
+    toastCustomerUpdated: 'Customer updated successfully.',
+    toastCustomerDeleted: 'Customer deleted successfully.',
+    toastSprayAdded: 'Spray record added successfully.',
+    toastSprayUpdated: 'Spray record updated successfully.',
+    toastSprayDeleted: 'Spray record deleted successfully.',
+    toastPaymentSuccess: 'Payment recorded successfully.',
+    toastUserAdded: 'User created successfully.',
+    toastUserUpdated: 'User updated successfully.',
+    toastUserDeleted: 'User deleted successfully.',
   },
 };
 

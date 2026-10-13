@@ -12,6 +12,7 @@ import UsersPage from './pages/UsersPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 import { customerApi, sprayApi, userApi } from './api/client';
+import { Toaster } from 'react-hot-toast';
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
@@ -170,6 +171,33 @@ export default function App() {
     <BrowserRouter>
       <LanguageProvider>
         <AuthProvider>
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              duration: 3500,
+              style: {
+                background: '#1e293b',
+                color: '#f8fafc',
+                border: '1px solid #334155',
+                borderRadius: '1rem',
+                padding: '12px 16px',
+                fontSize: '0.875rem',
+                boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.3)',
+              },
+              success: {
+                iconTheme: {
+                  primary: '#10b981',
+                  secondary: '#0f172a',
+                },
+              },
+              error: {
+                iconTheme: {
+                  primary: '#f43f5e',
+                  secondary: '#0f172a',
+                },
+              },
+            }}
+          />
           <MainApp />
         </AuthProvider>
       </LanguageProvider>
